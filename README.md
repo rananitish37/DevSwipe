@@ -64,3 +64,13 @@ So very simple strategy we already know how production works from taking a proje
 			4. ignored may be
 			etc.
 
+2. # API Design:
+	POST - /signup
+	POST - /login
+	POST - /profile  (to create)
+	GET  - /profile
+	PATCH - /profile (to update the profile)
+	POST - /sendRequest (ignore/intrested)
+	POST - /reviewRequest (accept/reject)
+	GET - /requests (to see all the request that i have got)
+	GET - /connection ( to get all the connections )
