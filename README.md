@@ -36,3 +36,31 @@ So very simple strategy we already know how production works from taking a proje
 8. etc will be aded later
 
 
+
+# Tech Planning:
+2 Microservices
+1. Frontend -> Using react
+2. Backend -> Using Nodejs/MongoDb
+
+
+
+# Before writing code there comes a LLD 
+1. # DB Design:
+	For user we need a User collection(if sql then user table)
+	- 1. fisrtname, lastname, emailid, password, age, gender etc..
+
+	Another for keeping track of how we will store when someone share request to any developers/ view their profile so we need to store that also
+	Inshot we need another collection for relationship 
+
+	ConnectionRequest: (fromUserId, toUserId, Status)
+
+
+	There can be multiple status if a user sends request to other then 
+		it will be first 
+			1. Pending 
+			then there will be two possiblities
+				either 2. accept or 3. reject 
+			if someone ignore the person comes in feed that status can be 
+			4. ignored may be
+			etc.
+
