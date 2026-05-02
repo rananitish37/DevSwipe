@@ -74,3 +74,33 @@ So very simple strategy we already know how production works from taking a proje
 	POST - /reviewRequest (accept/reject)
 	GET - /requests (to see all the request that i have got)
 	GET - /connection ( to get all the connections )
+
+
+# Routes:
+``const express = require("express")
+
+const app = express()
+
+
+//send this response even if url is different
+/*app.use((req,res) =>{
+    res.send("Response from server")
+})*/
+
+
+app.use("/home",(req,res)=>{
+    res.send("This is home page")
+});
+app.use("/contact",(req,res)=>{
+    res.send("This is contact page")
+});
+app.use("/",(req,res)=>{
+    res.send("This is main page")
+});
+app.listen(7777,()=>{
+    console.log("Server running on port no: 7777")
+})``
+
+Here in routing order matters a lot as we can see if i put / route on top then every requests will got to that only as it matches the /
+example /home so as soon as it finds / it will simply executes it and it will not go to others but when we change the order and now
+if /home will come it routes it to /home 
