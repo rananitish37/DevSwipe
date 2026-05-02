@@ -9,15 +9,26 @@ const app = express()
 })*/
 
 
-app.use("/home",(req,res)=>{
-    res.send("This is home page")
+// app.use("/home",(req,res)=>{
+//     res.send("This is home page")
+// });
+// app.use("/contact",(req,res)=>{
+//     res.send("This is contact page")
+// });
+// app.use("/",(req,res)=>{
+//     res.send("This is main page")
+// });
+
+app.get("/user",(req,res)=>{
+    res.send({firstname:"nitish", lastname:"rana"});
 });
-app.use("/contact",(req,res)=>{
-    res.send("This is contact page")
+app.post("/user",(req,res)=>{
+    res.send("Saved the data to database successfully");
 });
-app.use("/",(req,res)=>{
-    res.send("This is main page")
+app.delete("/user",(req,res)=>{
+    res.send("User deleted from database");
 });
+
 app.listen(7777,()=>{
     console.log("Server running on port no: 7777")
 })
