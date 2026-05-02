@@ -37,14 +37,14 @@ So very simple strategy we already know how production works from taking a proje
 
 
 
-# Tech Planning:
+# Tech Planning: (HLD - High level designing)
 2 Microservices
 1. Frontend -> Using react
 2. Backend -> Using Nodejs/MongoDb
 
 
 
-# Before writing code there comes a LLD 
+# Before writing code there comes a LLD (Low level design)
 1. # DB Design:
 	For user we need a User collection(if sql then user table)
 	- 1. fisrtname, lastname, emailid, password, age, gender etc..
