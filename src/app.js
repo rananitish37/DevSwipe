@@ -1,4 +1,5 @@
-const express = require("express")
+const express = require("express");
+const { adminAuth } = require("./middleware/auth");
 
 const app = express()
 
@@ -19,15 +20,34 @@ const app = express()
 //     res.send("This is main page")
 // });
 
-app.get("/user",(req,res)=>{
-    res.send({firstname:"nitish", lastname:"rana"});
-});
-app.post("/user",(req,res)=>{
-    res.send("Saved the data to database successfully");
-});
-app.delete("/user",(req,res)=>{
-    res.send("User deleted from database");
-});
+//Regex
+// app.get(/u/,(req,res)=>{
+//     res.send("Anything in url which contains u in this");
+// });
+// app.get(/.*fly$/,(req,res)=>{
+//     res.send("Anything in url which ends with 'fly' ");
+// });
+
+//advance query (b is optional)
+// app.get("/user/ab?c",(req,res)=>{
+//     res.send("query request");
+// });
+
+// app.get("/user",(req,res)=>{
+//     res.send({firstname:"nitish", lastname:"rana"});
+// });
+// app.post("/user",(req,res)=>{
+//     res.send("Saved the data to database successfully");
+// });
+// app.delete("/user",(req,res)=>{
+//     res.send("User deleted from database");
+// });
+
+    app.get("/user",adminAuth)
+
+    app.get("/user",(req,res)=>{
+        res.send({firstname:"nitish", lastname:"rana"});
+    });
 
 app.listen(7777,()=>{
     console.log("Server running on port no: 7777")
