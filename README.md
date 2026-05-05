@@ -104,3 +104,121 @@ app.listen(7777,()=>{
 Here in routing order matters a lot as we can see if i put / route on top then every requests will got to that only as it matches the /
 example /home so as soon as it finds / it will simply executes it and it will not go to others but when we change the order and now
 if /home will come it routes it to /home 
+
+
+# LEarning till
+`
+const express = require("express");
+// const { adminAuth } = require("./middleware/auth");
+
+const app = express()
+
+
+//send this response even if url is different
+/*app.use((req,res) =>{
+    res.send("Response from server")
+})*/
+
+
+// app.use("/home",(req,res)=>{
+//     res.send("This is home page")
+// });
+// app.use("/contact",(req,res)=>{
+//     res.send("This is contact page")
+// });
+// app.use("/",(req,res)=>{
+//     res.send("This is main page")
+// });
+
+//Regex
+// app.get(/u/,(req,res)=>{
+//     res.send("Anything in url which contains u in this");
+// });
+// app.get(/.*fly$/,(req,res)=>{
+//     res.send("Anything in url which ends with 'fly' ");
+// });
+
+//advance query (b is optional)
+// app.get("/user/ab?c",(req,res)=>{
+//     res.send("query request");
+// });
+
+// app.get("/user",(req,res)=>{
+//     res.send({firstname:"nitish", lastname:"rana"});
+// });
+// app.post("/user",(req,res)=>{
+//     res.send("Saved the data to database successfully");
+// });
+// app.delete("/user",(req,res)=>{
+//     res.send("User deleted from database");
+// });
+
+    // app.get("/user",adminAuth)
+
+    
+
+    // app.get("/user",(req,res)=>{
+    //     throw new error("asdcvb");
+        
+    //     res.send("Holla");
+    // });
+    // app.use("/",(err,req,res,next)=>{
+    //     if(!err){
+    //         res.send({firstname:"nitish", lastname:"rana"});
+    //     }else{
+    //         res.status(409).send("Something went wrong")
+    //     }
+    // })
+    // app.get("/user/userProfile",(req,res)=>{
+    //     res.send("Calling profile")
+    // })
+
+app.listen(7777,()=>{
+    console.log("Server running on port no: 7777")
+})
+`
+
+
+# correct way of connecting db
+
+## DB file
+
+const mongoose = require("mongoose");
+
+/*
+mongoose.connect("mongodb+srv://rananitish37:Umang123@nodejs.s7dyhys.mongodb.net/") // this is all we need to connect the mongo db but it is not the recommended way of doing it
+*/
+const connectDB = async () => {
+  await mongoose.connect(
+    "mongodb+srv://rananitish37:Umang123@nodejs.s7dyhys.mongodb.net/devSwipe"
+  );
+};
+
+//right now this connection is being made after call the server but the good practice should be like connect the db first then call server so
+//do it in app.js only
+/*
+connectDB().then(()=>{
+    console.log("Database connection establish...")
+}).catch((err)=>{
+    console.error("Database connection not established!!")
+})
+    */
+
+module.exports = connectDB;
+
+
+## in app.js
+const express = require("express");
+const app = express()
+const connectDB = require("./config/database")
+
+connectDB().then(()=>{
+    console.log("Database connection establish...")
+    app.listen(7777,()=>{
+        console.log("Server running on port no: 7777")
+    })
+}).catch((err)=>{
+    console.error("Database connection not established!!")
+})
+
+
