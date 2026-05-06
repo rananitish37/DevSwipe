@@ -222,3 +222,34 @@ connectDB().then(()=>{
 })
 
 
+
+## dummy data save
+app.post("/signup",async (req,res)=>{
+    const userObj = {
+        firstName: "Nitish",
+        secondName: "Rana",
+        emailId: "nitish@rana.com",
+        password: "Nitish@123",
+    }
+
+    const user = new User(userObj);
+
+    await user.save()
+    res.status(200).send("Data saved successfully in database")
+})
+
+## now dynamic data
+app.use(express.json())
+
+app.post("/signup",async (req,res)=>{
+    console.log(req.body)
+
+    const user = new User(req.body);
+
+    await user.save()
+    res.status(200).send("Data saved successfully in database")
+})
+
+
+### app.use(express.json()) this is used to get the data as json and convert it to javascript object
+ as app.use() without any api is being call for all the request no matter what (get,post,..etc)
