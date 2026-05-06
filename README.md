@@ -253,3 +253,9 @@ app.post("/signup",async (req,res)=>{
 
 ### app.use(express.json()) this is used to get the data as json and convert it to javascript object
  as app.use() without any api is being call for all the request no matter what (get,post,..etc)
+
+
+# update data 
+// const user = await User.findByIdAndUpdate(userId,data,{returnDocument: "after"}) this last argument is option and it returns the object(data) after update or say new data
+        // const user = await User.findByIdAndUpdate(userId,data,{returnDocument: "before"}) in this it will return the old data from db
+        // Bydefault it is before so will return old data
