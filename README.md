@@ -280,3 +280,47 @@ app.patch("/user", async (req, res) => {
     res.status(400).send("Something went wrong"+error.message);
   }
 });
+
+
+# validation
+app.post("/signup", async (req, res) => {
+    //this should not be like this as we can't trust req.body as user may enter anything so first we need to validate the data from user
+    //const user = new User(req.body);
+
+  try {
+    //validate the req
+    userSignupValidation(req);
+
+    //encypt the password
+    await user.save();
+    res.status(200).send("Data saved successfully in database");
+  } catch (err) {
+    res.status(401).send("Error: " + err.message);
+  }
+});
+
+const validator = require("validator")
+
+const userSignupValidation = (req)=>{
+    const {firstName, lastName, emailId, password} = req.body;
+
+    if(!firstName || !lastName){
+        throw new Error("firstName and lastName is required")
+    }else if(firstName.length < 4 || firstName >50){
+        throw new Error("first name should be of length 4 - 50")
+    }else if(lastName.length < 4 || lastName >50){
+        throw new Error("last name should be of length 4 - 50")
+    }else if(!validator.isEmail(emailId)){
+        throw new Error("Email is not valid please enter valid email")
+    }else if(!validator.isStrongPassword(password)){
+        throw new Error("Password is not strong please enter a strong password")
+    }
+}
+
+module.exports = {
+    userSignupValidation,
+}
+
+# end of validation
+# ===============================================================================
+# 

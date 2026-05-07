@@ -3,24 +3,48 @@ const app = express();
 const connectDB = require("./config/database");
 const User = require("./models/User");
 const {userSignupValidation} = require("./utils/validation")
+const bcrypt = require("bcrypt")
 
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-    //this should not be like this as we can't trust req.body as user may enter anything so first we need to validate the data from user
-    //const user = new User(req.body);
-
+    const {firstName, lastName, emailId, password} = req.body;
   try {
-    //validate the req
     userSignupValidation(req);
 
-    //encypt the password
+    const encPassword =await bcrypt.hash(password,10);
+    const user = new User({
+        firstName,
+        lastName,
+        emailId,
+        password:encPassword,
+    });
+
     await user.save();
     res.status(200).send("Data saved successfully in database");
   } catch (err) {
     res.status(401).send("Error: " + err.message);
   }
 });
+
+app.post("/login",async (req,res)=>{
+    const {emailId, password} = req.body;
+
+    try{
+        const user = await User.findOne({emailId: emailId});
+        if(!user){
+            throw new Error(" Invalid credential")
+        }
+        const validUser =await bcrypt.compare(password,user.password);
+        if(validUser){
+            res.send("Logged in Successfully!")
+        }else{
+            throw new Error(" Invalid credential")
+        }
+    }catch (err) {
+    res.status(401).send("Error: " + err.message);
+  }
+})
 
 app.get("/user", async (req, res) => {
   const userEmail = req.body.emailId;
