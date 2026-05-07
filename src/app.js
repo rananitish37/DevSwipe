@@ -2,16 +2,23 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
 const User = require("./models/User");
+const {userSignupValidation} = require("./utils/validation")
 
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-  const user = new User(req.body);
+    //this should not be like this as we can't trust req.body as user may enter anything so first we need to validate the data from user
+    //const user = new User(req.body);
+
   try {
+    //validate the req
+    userSignupValidation(req);
+
+    //encypt the password
     await user.save();
     res.status(200).send("Data saved successfully in database");
   } catch (err) {
-    res.status(401).send("Something went wrong:" + err.message);
+    res.status(401).send("Error: " + err.message);
   }
 });
 
