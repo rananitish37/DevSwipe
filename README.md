@@ -259,3 +259,24 @@ app.post("/signup",async (req,res)=>{
 // const user = await User.findByIdAndUpdate(userId,data,{returnDocument: "after"}) this last argument is option and it returns the object(data) after update or say new data
         // const user = await User.findByIdAndUpdate(userId,data,{returnDocument: "before"}) in this it will return the old data from db
         // Bydefault it is before so will return old data
+
+app.patch("/user", async (req, res) => {
+  const userId = req.body.userId;
+  const data = req.body;
+
+  try {
+    // const user = await User.findByIdAndUpdate(userId,data,{returnDocument: "after"}) this last argument is option and it returns the object(data) after update or say new data
+    // const user = await User.findByIdAndUpdate(userId,data,{returnDocument: "before"}) in this it will return the old data from db
+    // Bydefault it is before so will return old data
+
+    const user = await User.findByIdAndUpdate(userId, data, {
+      returnDocument: "before",
+      runValidators: true,
+    });
+    //we have added runValidator because the validator funtion written inside user model will only run during creation of user so to make it run even when we update we need to call it explicitly
+    console.log(user);
+    res.send("Data updated successfully");
+  } catch (error) {
+    res.status(400).send("Something went wrong"+error.message);
+  }
+});
