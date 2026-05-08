@@ -5,9 +5,10 @@ const User = require("./models/User");
 const {userSignupValidation} = require("./utils/validation")
 const bcrypt = require("bcrypt")
 const cookieParser = require("cookie-parser")
+const jwt = require("jsonwebtoken")
 
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser()); // this is need as we needed express.json() to parse the data so that we can see it cookie-parser is also used to parse the cookie so that we can get it exact instead of undefined
 
 app.post("/signup", async (req, res) => {
     const {firstName, lastName, emailId, password} = req.body;
@@ -38,8 +39,9 @@ app.post("/login",async (req,res)=>{
             throw new Error(" Invalid credential")
         }
         const validUser =await bcrypt.compare(password,user.password);
+        const token = jwt.sign({_id:user._id},"DEV@swipe1309")
         if(validUser){
-            res.cookie("token","asdftrdfsxdhfbesakdjghfdsidu")
+            res.cookie("token",token)
             res.send("Logged in Successfully!")
         }else{
             throw new Error(" Invalid credential")
@@ -51,11 +53,20 @@ app.post("/login",async (req,res)=>{
 
 app.get("/profile", async (req,res)=>{
     try{
-        const token = req.cookies;
-        console.log(token)
-        res.send("User profile")
+        const cookies = req.cookies;
+        const {token} = cookies;
+        const decode = jwt.verify(token,"DEV@swipe1309");
+        if(!decode
+        ){
+            throw new Error("Please try login again")
+        }
+        const user = await User.findById(decode._id);
+        if(!user){
+            throw new Error("User not found")
+        }
+        res.send(user)
     }catch (err) {
-    res.status(401).send("Error: " + err.message);
+    res.status(401).send("Error: "+err);
   }
 })
 

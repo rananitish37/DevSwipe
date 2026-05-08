@@ -323,4 +323,37 @@ module.exports = {
 
 # end of validation
 # ===============================================================================
-# 
+# Cookie - JWT
+    app.use(cookieParser()); // this is need as we needed express.json() to parse the data so that we can see it cookie-parser is also used to parse the cookie so that we can get it exact instead of undefined
+
+### dummy token setting
+	app.post("/login",async (req,res)=>{
+    const {emailId, password} = req.body;
+
+    try{
+        const user = await User.findOne({emailId: emailId});
+        if(!user){
+            throw new Error(" Invalid credential")
+        }
+        const validUser =await bcrypt.compare(password,user.password);
+        if(validUser){
+            res.cookie("token","asdftrdfsxdhfbesakdjghfdsidu")
+            res.send("Logged in Successfully!")
+        }else{
+            throw new Error(" Invalid credential")
+        }
+    }catch (err) {
+    res.status(401).send("Error: " + err.message);
+  }
+})
+
+app.get("/profile", async (req,res)=>{
+    try{
+        const token = req.cookies;
+        console.log(token)
+        res.send("User profile")
+    }catch (err) {
+    res.status(401).send("Error: " + err.message);
+  }
+})
+
