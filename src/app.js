@@ -6,6 +6,7 @@ const {userSignupValidation} = require("./utils/validation")
 const bcrypt = require("bcrypt")
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
+const {userAuth} = require("./middleware/auth")
 
 app.use(express.json());
 app.use(cookieParser()); // this is need as we needed express.json() to parse the data so that we can see it cookie-parser is also used to parse the cookie so that we can get it exact instead of undefined
@@ -30,7 +31,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/login",async (req,res)=>{
+app.post("/login", async (req,res)=>{
     const {emailId, password} = req.body;
 
     try{
@@ -51,20 +52,10 @@ app.post("/login",async (req,res)=>{
   }
 })
 
-app.get("/profile", async (req,res)=>{
+app.get("/profile",userAuth, async (req,res)=>{
     try{
-        const cookies = req.cookies;
-        const {token} = cookies;
-        const decode = jwt.verify(token,"DEV@swipe1309");
-        if(!decode
-        ){
-            throw new Error("Please try login again")
-        }
-        const user = await User.findById(decode._id);
-        if(!user){
-            throw new Error("User not found")
-        }
-        res.send(user)
+        console.log(req.user)
+        res.send(req.user)
     }catch (err) {
     res.status(401).send("Error: "+err);
   }
