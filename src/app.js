@@ -40,7 +40,7 @@ app.post("/login", async (req,res)=>{
             throw new Error(" Invalid credential")
         }
         const validUser =await bcrypt.compare(password,user.password);
-        const token = jwt.sign({_id:user._id},"DEV@swipe1309")
+        const token = jwt.sign({_id:user._id},"DEV@swipe1309",{expiresIn:"1d"})
         if(validUser){
             res.cookie("token",token)
             res.send("Logged in Successfully!")
@@ -54,7 +54,6 @@ app.post("/login", async (req,res)=>{
 
 app.get("/profile",userAuth, async (req,res)=>{
     try{
-        console.log(req.user)
         res.send(req.user)
     }catch (err) {
     res.status(401).send("Error: "+err);
