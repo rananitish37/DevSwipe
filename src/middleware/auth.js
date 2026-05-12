@@ -3,7 +3,6 @@ const User = require("../models/User");
 
 const userAuth = async (req,res,next)=>{
     try {
-        console.log("calling auth")
         const cookie = req.cookies;
         const {token} = cookie;
         if(!token){
@@ -17,7 +16,7 @@ const userAuth = async (req,res,next)=>{
         req.user = user;
         next();
     } catch (error) {
-        console.log("Unauthorized user"+error)
+        res.send("Unathorized access")
     }
 }
 

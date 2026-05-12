@@ -5,7 +5,6 @@ const User = require("./models/User");
 const {userSignupValidation} = require("./utils/validation")
 const bcrypt = require("bcrypt")
 const cookieParser = require("cookie-parser")
-const jwt = require("jsonwebtoken")
 const {userAuth} = require("./middleware/auth")
 
 app.use(express.json());
@@ -39,9 +38,11 @@ app.post("/login", async (req,res)=>{
         if(!user){
             throw new Error(" Invalid credential")
         }
-        const validUser =await bcrypt.compare(password,user.password);
-        const token = jwt.sign({_id:user._id},"DEV@swipe1309",{expiresIn:"1d"})
+        const validUser =await user.validatePassword(password);
+        const token =await user.getJWT();
+        
         if(validUser){
+            
             res.cookie("token",token)
             res.send("Logged in Successfully!")
         }else{
@@ -63,7 +64,6 @@ app.get("/profile",userAuth, async (req,res)=>{
 
 app.get("/user", async (req, res) => {
   const userEmail = req.body.emailId;
-  console.log(userEmail);
   try {
     const user = await User.findOne({ emailId: userEmail });
     if (!user) {
